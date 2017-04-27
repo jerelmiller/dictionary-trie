@@ -1,0 +1,2 @@
+import createDictionary from '../src'
+
