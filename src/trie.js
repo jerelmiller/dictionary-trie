@@ -3,6 +3,18 @@ const TERMINATOR = '$'
 export default () => {
   const root = {}
 
+  const pathsFor = (node, str = '') =>
+    Object
+      .keys(node)
+      .map(character => {
+        if (character === TERMINATOR) {
+          return str
+        }
+
+        return pathsFor(node[character], str + character)
+      })
+      .reduce((x, y) => x.concat(y), [])
+
   return {
     insert: word => {
       let currentNode = root
@@ -21,25 +33,12 @@ export default () => {
       return !!node[TERMINATOR]
     },
     search: word => {
-      const matches = []
-
       const node = word
         .toLowerCase()
         .split('')
         .reduce((node, character) => node[character] || {}, root)
 
-      const pathsFor = node => {
-        return Object
-          .keys(node)
-          .filter(character => character !== TERMINATOR)
-          .map(character => character + pathsFor(node[character]))
-      }
-
-      if (node[TERMINATOR]) {
-        matches.push(word)
-      }
-
-      return matches.concat(pathsFor(node).map(suffix => word + suffix))
+      return pathsFor(node, word)
     }
   }
 }
