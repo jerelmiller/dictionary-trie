@@ -43,7 +43,7 @@ export default words => {
   words.forEach(insert)
 
   return {
-    includes: word => nodeFor(word)[TERMINATOR] || false,
+    includes: compose(or(false), prop(TERMINATOR), nodeFor),
     search: word => pathsFor(nodeFor(word), word)
   }
 }
