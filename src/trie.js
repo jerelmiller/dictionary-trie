@@ -13,12 +13,6 @@ export default () => {
       currentNode[TERMINATOR] = true
     },
     includes: word => {
-      if (!word) {
-        return false
-      } else if (Object.keys(root).length === 0) {
-        return false
-      }
-
       let currentNode = root
 
       return word
