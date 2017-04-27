@@ -1,9 +1,14 @@
-import { compose, reduce } from './functional'
+import { compose, curry, map, prop, reduce } from './functional'
 
 const TERMINATOR = '$'
 
 const concat = (a, b) => a.concat(b)
+const flatten = reduce(concat, [])
 const characters = word => word.toLowerCase().split('')
+const keys = Object.keys
+const or = curry((defaultVal, val) => val || defaultVal)
+
+const isWordBoundary = compose(or(false), prop(TERMINATOR))
 
 const insertWith = tree => word => {
   let currentNode = tree
@@ -14,21 +19,20 @@ const insertWith = tree => word => {
   currentNode[TERMINATOR] = true
 }
 
-const findMutations = (node, word) =>
-  Object
-    .keys(node)
-    .map(character =>
-      character === TERMINATOR ?
-        word :
-        findMutations(node[character], word + character)
-    )
-    .reduce(concat, [])
+const findMutations = (node, word) => compose(
+  flatten,
+  map(character =>
+    character === TERMINATOR ?
+      word :
+      findMutations(node[character], word + character)
+  ),
+  keys
+)(node)
 
-const traverseWith = tree =>
-  compose(
-    reduce((node, character) => node[character] || {}, tree),
-    characters
-  )
+const traverseWith = tree => compose(
+  reduce((node, character) => node[character] || {}, tree),
+  characters
+)
 
 export default words => {
   const root = {}
@@ -37,7 +41,7 @@ export default words => {
   words.forEach(insertWith(root))
 
   return {
-    includes: word => traverse(word)[TERMINATOR] || false,
+    includes: compose(isWordBoundary, traverse),
     search: word => findMutations(traverse(word), word)
   }
 }

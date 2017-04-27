@@ -8,3 +8,4 @@ export const curry = (f, ...args) =>
 
 export const map = curry((f, arr) => arr.map(f))
 export const reduce = curry((f, initial, arr) => arr.reduce(f, initial))
+export const prop = curry((key, obj) => obj[key])
