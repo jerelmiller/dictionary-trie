@@ -62,9 +62,9 @@ describe('createDictionary', () => {
     })
 
     it('returns no matches when when dictionary does not contain word', () => {
-      const dictionary = createDictionary(['seal'])
+      const dictionary = createDictionary(['watch'])
 
-      expect(dictionary.search('couch')).toEqual([])
+      expect(dictionary.search('watched')).toEqual([])
     })
 
     it('handles partial and exact matches', () => {
