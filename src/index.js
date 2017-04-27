@@ -16,9 +16,10 @@ const keys = Object.keys
 const map = curry((f, arr) => arr.map(f))
 const reduce = curry((f, initial, arr) => arr.reduce(f, initial))
 const flip = f => (a, b, ...args) => f(b, a, ...args)
-const dig = flip(prop)
 const flatten = reduce(concat, [])
+const traverse = reduce(compose(or({}), flip(prop)))
 const set = curry((key, val, obj) => obj[key] = val)
+const isWordBoundary = compose(or(false), prop(TERMINATOR))
 
 const insertWith = root =>
   compose(
@@ -27,20 +28,16 @@ const insertWith = root =>
     characters
   )
 
-const digWith = root =>
-  compose(
-    reduce(compose(or({}), dig), root),
-    characters
-  )
+const traverseWith = root => compose(traverse(root), characters)
 
 export default words => {
   const root = {}
 
   const insert = insertWith(root)
-  const nodeFor = digWith(root)
+  const walk = traverseWith(root)
 
-  const pathsFor = (node, str = '') => {
-    return compose(
+  const pathsFor = (node, str = '') =>
+    compose(
       flatten,
       map(character => {
         if (character === TERMINATOR) {
@@ -51,12 +48,11 @@ export default words => {
       }),
       keys
     )(node)
-  }
 
   words.forEach(insert)
 
   return {
-    includes: compose(or(false), prop(TERMINATOR), nodeFor),
-    search: word => pathsFor(nodeFor(word), word)
+    includes: compose(isWordBoundary, walk),
+    search: word => pathsFor(walk(word), word)
   }
 }
