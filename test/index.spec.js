@@ -19,5 +19,19 @@ describe('createDictionary', () => {
 
       expect(dictionary.includes('test')).toBe(false)
     })
+
+    it('returns false for partial word matches', () => {
+      const dictionary = createDictionary(['rate'])
+
+      expect(dictionary.includes('rat')).toBe(false)
+    })
+
+    it('returns true for common roots', () => {
+      const dictionary = createDictionary(['rat', 'rate', 'rates'])
+
+      expect(dictionary.includes('rat')).toBe(true)
+      expect(dictionary.includes('rate')).toBe(true)
+      expect(dictionary.includes('rates')).toBe(true)
+    })
   })
 })
