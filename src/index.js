@@ -11,7 +11,7 @@ const split = curry((separator, str) => str.split(separator))
 const characters = compose(split(''), lowerCase)
 const prop = curry((property, obj) => obj[property])
 const or = curry((defaultVal, val) => val || defaultVal)
-const concat = (a, b) => a.concat(b)
+const concat = curry((a, b) => a.concat(b))
 const keys = Object.keys
 const map = curry((f, arr) => arr.map(f))
 const reduce = curry((f, initial, arr) => arr.reduce(f, initial))
@@ -39,13 +39,11 @@ export default words => {
   const pathsFor = (node, str = '') =>
     compose(
       flatten,
-      map(character => {
-        if (character === TERMINATOR) {
-          return str
-        }
-
-        return pathsFor(node[character], str + character)
-      }),
+      map(character =>
+        character === TERMINATOR ?
+          str :
+          pathsFor(node[character], concat(str, character))
+      ),
       keys
     )(node)
 
