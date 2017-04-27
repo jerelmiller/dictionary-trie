@@ -1,6 +1,11 @@
-// @flow
-export default (words: Array<string>) => {
+import createTrie from './trie'
+
+export default words => {
+  const trie = createTrie()
+
+  words.forEach(trie.insert)
+
   return {
-    includes: (): boolean => false
+    includes: word => trie.includes(word)
   }
 }
