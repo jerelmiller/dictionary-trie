@@ -4,6 +4,9 @@ export default () => {
   const root = {}
 
   const characters = word => word.toLowerCase().split('')
+  const nodeFor = word =>
+    characters(word)
+      .reduce((node, character) => node[character] || {}, root)
 
   const pathsFor = (node, str = '') =>
     Object
@@ -26,17 +29,7 @@ export default () => {
       })
       currentNode[TERMINATOR] = true
     },
-    includes: word => {
-      const node = characters(word)
-        .reduce((node, character) => node[character] || {}, root)
-
-      return !!node[TERMINATOR]
-    },
-    search: word => {
-      const node = characters(word)
-        .reduce((node, character) => node[character] || {}, root)
-
-      return pathsFor(node, word)
-    }
+    includes: word => !!nodeFor(word)[TERMINATOR],
+    search: word => pathsFor(nodeFor(word), word)
   }
 }
