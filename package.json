@@ -2,7 +2,7 @@
   "name": "dictionary-trie",
   "version": "1.0.0",
   "description": "Store a dictionary of words implemented with a trie",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest"
   },
