@@ -33,5 +33,18 @@ describe('createDictionary', () => {
       expect(dictionary.includes('rate')).toBe(true)
       expect(dictionary.includes('rates')).toBe(true)
     })
+
+    it('handles many dictionary words', () => {
+      const dictionary = createDictionary([
+        'rat', 'rate', 'music', 'musician', 'flower', 'flow', 'data', 'water',
+        'wait', 'rain', 'rainer', 'rained', 'raining', 'couch', 'room'
+      ])
+
+      expect(dictionary.includes('rat')).toBe(true)
+      expect(dictionary.includes('music')).toBe(true)
+      expect(dictionary.includes('flower')).toBe(true)
+      expect(dictionary.includes('balloon')).toBe(false)
+      expect(dictionary.includes('rain')).toBe(true)
+    })
   })
 })
