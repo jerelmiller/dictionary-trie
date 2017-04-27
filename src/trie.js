@@ -3,6 +3,8 @@ const TERMINATOR = '$'
 export default () => {
   const root = {}
 
+  const characters = word => word.toLowerCase().split('')
+
   const pathsFor = (node, str = '') =>
     Object
       .keys(node)
@@ -18,24 +20,20 @@ export default () => {
   return {
     insert: word => {
       let currentNode = root
-      word.toLowerCase().split('').forEach(character => {
+      characters(word).forEach(character => {
         currentNode[character] = currentNode[character] || {}
         currentNode = currentNode[character]
       })
       currentNode[TERMINATOR] = true
     },
     includes: word => {
-      const node = word
-        .toLowerCase()
-        .split('')
+      const node = characters(word)
         .reduce((node, character) => node[character] || {}, root)
 
       return !!node[TERMINATOR]
     },
     search: word => {
-      const node = word
-        .toLowerCase()
-        .split('')
+      const node = characters(word)
         .reduce((node, character) => node[character] || {}, root)
 
       return pathsFor(node, word)
