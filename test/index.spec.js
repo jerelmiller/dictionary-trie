@@ -47,4 +47,51 @@ describe('createDictionary', () => {
       expect(dictionary.includes('rain')).toBe(true)
     })
   })
+
+  describe('#search', () => {
+    it('returns exact matches', () => {
+      const dictionary = createDictionary(['watch'])
+
+      expect(dictionary.search('watch')).toEqual(['watch'])
+    })
+
+    it('returns partial matches', () => {
+      const dictionary = createDictionary(['watched'])
+
+      expect(dictionary.search('watch')).toEqual(['watched'])
+    })
+
+    it('returns no matches when when dictionary does not contain word', () => {
+      const dictionary = createDictionary(['seal'])
+
+      expect(dictionary.search('couch')).toEqual([])
+    })
+
+    it('handles partial and exact matches', () => {
+      const dictionary = createDictionary([
+        'watch', 'watched', 'watching', 'watches'
+      ])
+
+      expect(dictionary.search('watch')).toEqual([
+        'watch', 'watched', 'watching', 'watches'
+      ])
+    })
+
+    it('handles random cases', () => {
+      const dictionary = createDictionary([
+        'watch', 'watched', 'watching', 'watches', 'watcher',
+        'flower', 'flow', 'flowed', 'cookie', 'cook', 'can', 'cotton'
+      ])
+
+      expect(dictionary.search('watche')).toEqual([
+        'watched', 'watches', 'watcher'
+      ])
+      expect(dictionary.search('flow')).toEqual([
+        'flow', 'flowed', 'flower'
+      ])
+      expect(dictionary.search('cook')).toEqual(['cookie', 'cook'])
+      expect(dictionary.search('cotton')).toEqual(['cotton'])
+      expect(dictionary.search('blah')).toEqual([])
+    })
+  })
 })
