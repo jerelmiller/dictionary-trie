@@ -28,11 +28,18 @@ export default () => {
         .split('')
         .reduce((node, character) => node[character] || {}, root)
 
+      const pathsFor = node => {
+        return Object
+          .keys(node)
+          .filter(character => character !== TERMINATOR)
+          .map(character => character + pathsFor(node[character]))
+      }
+
       if (node[TERMINATOR]) {
         matches.push(word)
       }
 
-      return matches
+      return matches.concat(pathsFor(node).map(suffix => word + suffix))
     }
   }
 }
