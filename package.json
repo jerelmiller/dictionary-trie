@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "BABEL_ENV=commonjs babel src --out-dir lib",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "yarn test -- --watch"
   },
   "repository": {
     "type": "git",
