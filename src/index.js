@@ -1,11 +1,4 @@
-import {
-  compose,
-  curry,
-  flip,
-  map,
-  prop,
-  reduce
-} from './functional'
+import { compose, curry, flip, map, prop, reduce } from './functional'
 
 const TERMINATOR = '$'
 
