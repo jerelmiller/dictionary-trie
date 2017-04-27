@@ -29,7 +29,7 @@ export default () => {
       })
       currentNode[TERMINATOR] = true
     },
-    includes: word => !!nodeFor(word)[TERMINATOR],
+    includes: word => nodeFor(word)[TERMINATOR] || false,
     search: word => pathsFor(nodeFor(word), word)
   }
 }
