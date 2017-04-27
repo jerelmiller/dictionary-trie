@@ -11,19 +11,21 @@ const split = curry((separator, str) => str.split(separator))
 const characters = compose(split(''), lowerCase)
 const prop = curry((property, obj) => obj[property])
 const or = curry((defaultVal, val) => val || defaultVal)
-const concat = curry((a, b) => a.concat(b))
+const concat = (a, b) => a.concat(b)
 const keys = Object.keys
 const map = curry((f, arr) => arr.map(f))
 const reduce = curry((f, initial, arr) => arr.reduce(f, initial))
 const flip = f => (a, b, ...args) => f(b, a, ...args)
+const set = curry((key, val, obj) => obj[key] = val)
+
 const flatten = reduce(concat, [])
 const traverse = reduce(compose(or({}), flip(prop)))
-const set = curry((key, val, obj) => obj[key] = val)
 const isWordBoundary = compose(or(false), prop(TERMINATOR))
+const markBoundary = set(TERMINATOR, true)
 
 const insertWith = root =>
   compose(
-    set(TERMINATOR, true),
+    markBoundary,
     reduce((node, character) => node[character] = node[character] || {}, root),
     characters
   )
@@ -36,13 +38,13 @@ export default words => {
   const insert = insertWith(root)
   const walk = traverseWith(root)
 
-  const pathsFor = (node, str = '') =>
+  const findMutations = (node, str) =>
     compose(
       flatten,
       map(character =>
         character === TERMINATOR ?
           str :
-          pathsFor(node[character], concat(str, character))
+          findMutations(node[character], concat(str, character))
       ),
       keys
     )(node)
@@ -51,6 +53,6 @@ export default words => {
 
   return {
     includes: compose(isWordBoundary, walk),
-    search: word => pathsFor(walk(word), word)
+    search: word => findMutations(walk(word), word)
   }
 }
