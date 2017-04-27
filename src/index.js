@@ -1,3 +1,5 @@
+import { compose, reduce } from './functional'
+
 const TERMINATOR = '$'
 
 const concat = (a, b) => a.concat(b)
@@ -22,8 +24,11 @@ const findMutations = (node, word) =>
     )
     .reduce(concat, [])
 
-const traverseWith = tree => word =>
-  characters(word).reduce((node, character) => node[character] || {}, tree)
+const traverseWith = tree =>
+  compose(
+    reduce((node, character) => node[character] || {}, tree),
+    characters
+  )
 
 export default words => {
   const root = {}
