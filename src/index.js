@@ -7,8 +7,10 @@ const curry = (f, ...args) =>
     (...next) => curry(f, ...args, ...next)
 
 const lowerCase = str => str.toLowerCase()
-const split = separator => str => str.split(separator)
+const split = curry((separator, str) => str.split(separator))
 const characters = compose(split(''), lowerCase)
+const prop = curry((property, obj) => obj[property])
+const or = curry((defaultVal, val) => val || defaultVal)
 
 export default words => {
   const root = {}
