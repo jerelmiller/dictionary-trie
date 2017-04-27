@@ -14,18 +14,24 @@ const flatten = reduce(concat, [])
 const characters = word => word.toLowerCase().split('')
 const keys = Object.keys
 const or = curry((defaultVal, val) => val || defaultVal)
+const mutate = curry((key, value, obj) => {
+  obj[key] = value
+})
 
 const isWordBoundary = compose(or(false), prop(TERMINATOR))
 const traverse = reduce(compose(or({}), flip(prop)))
 
 const build = words =>
   words.reduce((tree, word) => {
-    let currentNode = tree
-    characters(word).forEach(character => {
-      currentNode[character] = currentNode[character] || {}
-      currentNode = currentNode[character]
-    })
-    currentNode[TERMINATOR] = true
+    compose(
+      mutate(TERMINATOR, true),
+      reduce(
+        (node, character) => node[character] = node[character] || {},
+        tree
+      ),
+      characters
+    )(word)
+
     return tree
   }, {})
 
