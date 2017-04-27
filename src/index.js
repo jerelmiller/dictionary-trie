@@ -11,10 +11,12 @@ const TERMINATOR = '$'
 
 const concat = (a, b) => a.concat(b)
 const flatten = reduce(concat, [])
-const characters = word => word.toLowerCase().split('')
+const split = curry((separator, str) => str.split(separator))
+const lowerCase = str => str.toLowerCase()
+const mutate = curry((key, value, obj) => obj[key] = value)
 const keys = Object.keys
 const or = curry((defaultVal, val) => val || defaultVal)
-const mutate = curry((key, value, obj) => obj[key] = value)
+const characters = compose(split(''), lowerCase)
 
 const isWordBoundary = compose(or(false), prop(TERMINATOR))
 const traverse = reduce(compose(or({}), flip(prop)))
