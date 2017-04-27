@@ -72,9 +72,9 @@ describe('createDictionary', () => {
         'watch', 'watched', 'watching', 'watches'
       ])
 
-      expect(dictionary.search('watch')).toEqual([
+      expect(dictionary.search('watch').sort()).toEqual([
         'watch', 'watched', 'watching', 'watches'
-      ])
+      ].sort())
     })
 
     it('handles random cases', () => {
@@ -83,12 +83,12 @@ describe('createDictionary', () => {
         'flower', 'flow', 'flowed', 'cookie', 'cook', 'can', 'cotton'
       ])
 
-      expect(dictionary.search('watche')).toEqual([
+      expect(dictionary.search('watche').sort()).toEqual([
         'watched', 'watches', 'watcher'
-      ])
-      expect(dictionary.search('flow')).toEqual([
+      ].sort())
+      expect(dictionary.search('flow').sort()).toEqual([
         'flow', 'flowed', 'flower'
-      ])
+      ].sort())
       expect(dictionary.search('cook')).toEqual(['cookie', 'cook'])
       expect(dictionary.search('cotton')).toEqual(['cotton'])
       expect(dictionary.search('blah')).toEqual([])
