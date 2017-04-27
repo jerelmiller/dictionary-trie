@@ -6,6 +6,7 @@ export default words => {
   words.forEach(trie.insert)
 
   return {
-    includes: word => trie.includes(word)
+    includes: trie.includes,
+    search: trie.search
   }
 }
