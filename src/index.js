@@ -18,14 +18,16 @@ const or = curry((defaultVal, val) => val || defaultVal)
 const isWordBoundary = compose(or(false), prop(TERMINATOR))
 const traverse = reduce(compose(or({}), flip(prop)))
 
-const insertWith = tree => word => {
-  let currentNode = tree
-  characters(word).forEach(character => {
-    currentNode[character] = currentNode[character] || {}
-    currentNode = currentNode[character]
-  })
-  currentNode[TERMINATOR] = true
-}
+const build = words =>
+  words.reduce((tree, word) => {
+    let currentNode = tree
+    characters(word).forEach(character => {
+      currentNode[character] = currentNode[character] || {}
+      currentNode = currentNode[character]
+    })
+    currentNode[TERMINATOR] = true
+    return tree
+  }, {})
 
 const findMutations = (node, word) => compose(
   flatten,
@@ -40,10 +42,8 @@ const findMutations = (node, word) => compose(
 const traverseWith = tree => compose(traverse(tree), characters)
 
 export default words => {
-  const root = {}
-  const traverse = traverseWith(root)
-
-  words.forEach(insertWith(root))
+  const tree = build(words)
+  const traverse = traverseWith(tree)
 
   return {
     includes: compose(isWordBoundary, traverse),
