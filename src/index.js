@@ -1,6 +1,6 @@
 const TERMINATOR = '$'
 
-const compose = (...fns) => (...args) => fns.reduce((f, g) => f(g(...args)))
+const compose = (...fns) => fns.reduce((f, g) => (...args) => f(g(...args)))
 
 const lowerCase = str => str.toLowerCase()
 const split = separator => str => str.split(separator)
