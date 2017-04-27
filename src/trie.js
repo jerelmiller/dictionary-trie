@@ -13,22 +13,12 @@ export default () => {
       currentNode[TERMINATOR] = true
     },
     includes: word => {
-      let currentNode = root
-
-      return word
+      const node = word
         .toLowerCase()
         .split('')
-        .reduce((isContained, character) => {
-          if (!isContained) {
-            return false
-          }
+        .reduce((node, character) => node[character] || {}, root)
 
-          const contained = isContained &&
-            Object.keys(currentNode).indexOf(character) !== -1
-          currentNode = currentNode[character] || {}
-
-          return contained
-        }, true)
+      return !!node[TERMINATOR]
     }
   }
 }
