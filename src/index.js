@@ -11,19 +11,14 @@ const TERMINATOR = '$'
 
 const concat = (a, b) => a.concat(b)
 const flatten = reduce(concat, [])
-const split = curry((separator, str) => str.split(separator))
-const lowerCase = str => str.toLowerCase()
-const mutate = curry((key, value, obj) => obj[key] = value)
-const keys = Object.keys
-const or = curry((defaultVal, val) => val || defaultVal)
-const characters = compose(split(''), lowerCase)
+const characters = word => word.toLowerCase().split('')
 
-const isWordBoundary = compose(or(false), prop(TERMINATOR))
-const traverse = reduce(compose(or({}), flip(prop)))
+const isWordBoundary = compose(Boolean, prop(TERMINATOR))
+const traverse = reduce(compose(val => val || {}, flip(prop)))
 
 const insert = (tree, word) => {
   compose(
-    mutate(TERMINATOR, true),
+    node => node[TERMINATOR] = true,
     reduce((node, letter) => node[letter] = node[letter] || {}, tree),
     characters
   )(word)
@@ -38,7 +33,7 @@ const findMutations = (node, word) => compose(
       word :
       findMutations(node[character], word + character)
   ),
-  keys
+  Object.keys
 )(node)
 
 const assemble = words => reduce(insert, {}, words)
