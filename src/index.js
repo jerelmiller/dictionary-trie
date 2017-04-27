@@ -11,34 +11,42 @@ const split = curry((separator, str) => str.split(separator))
 const characters = compose(split(''), lowerCase)
 const prop = curry((property, obj) => obj[property])
 const or = curry((defaultVal, val) => val || defaultVal)
+const concat = (a, b) => a.concat(b)
+const keys = Object.keys
+const map = curry((f, arr) => arr.map(f))
+const reduce = curry((f, initial, arr) => arr.reduce(f, initial))
+const flip = f => (a, b, ...args) => f(b, a, ...args)
+const dig = flip(prop)
+const flatten = reduce(concat, [])
+const set = curry((key, val, obj) => obj[key] = val)
 
 export default words => {
   const root = {}
 
-  const insert = word => {
-    let currentNode = root
-    characters(word).forEach(character => {
-      currentNode[character] = currentNode[character] || {}
-      currentNode = currentNode[character]
-    })
-    currentNode[TERMINATOR] = true
-  }
+  const insert = compose(
+    set(TERMINATOR, true),
+    reduce((node, character) => node[character] = node[character] || {}, root),
+    characters
+  )
 
-  const nodeFor = word =>
-    characters(word)
-      .reduce((node, character) => node[character] || {}, root)
+  const nodeFor = compose(
+    reduce(compose(or({}), dig), root),
+    characters
+  )
 
-  const pathsFor = (node, str = '') =>
-    Object
-      .keys(node)
-      .map(character => {
+  const pathsFor = (node, str = '') => {
+    return compose(
+      flatten,
+      map(character => {
         if (character === TERMINATOR) {
           return str
         }
 
         return pathsFor(node[character], str + character)
-      })
-      .reduce((x, y) => x.concat(y), [])
+      }),
+      keys
+    )(node)
+  }
 
   words.forEach(insert)
 
