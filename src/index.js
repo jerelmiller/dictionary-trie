@@ -1,5 +1,11 @@
 const TERMINATOR = '$'
 
+const compose = (...fns) => (...args) => fns.reduce((f, g) => f(g(...args)))
+
+const lowerCase = str => str.toLowerCase()
+const split = separator => str => str.split(separator)
+const characters = compose(split(''), lowerCase)
+
 export default words => {
   const root = {}
 
@@ -12,7 +18,6 @@ export default words => {
     currentNode[TERMINATOR] = true
   }
 
-  const characters = word => word.toLowerCase().split('')
   const nodeFor = word =>
     characters(word)
       .reduce((node, character) => node[character] || {}, root)
