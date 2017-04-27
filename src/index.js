@@ -5,16 +5,14 @@ const TERMINATOR = '$'
 const concat = (a, b) => a.concat(b)
 const flatten = reduce(concat, [])
 const characters = word => word.toLowerCase().split('')
+const defineNode = reduce((node, letter) => node[letter] = node[letter] || {})
+const markWordBoundary = node => node[TERMINATOR] = true
 
 const isWordBoundary = compose(Boolean, prop(TERMINATOR))
 const traverse = reduce(compose(val => val || {}, flip(prop)))
 
 const insert = (tree, word) => {
-  compose(
-    node => node[TERMINATOR] = true,
-    reduce((node, letter) => node[letter] = node[letter] || {}, tree),
-    characters
-  )(word)
+  compose(markWordBoundary, defineNode(tree), characters)(word)
 
   return tree
 }
