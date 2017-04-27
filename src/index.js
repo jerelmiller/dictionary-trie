@@ -22,7 +22,7 @@ const traverse = reduce(compose(or({}), flip(prop)))
 const insert = (tree, word) => {
   compose(
     mutate(TERMINATOR, true),
-    reduce((node, character) => node[character] = node[character] || {}, tree),
+    reduce((node, letter) => node[letter] = node[letter] || {}, tree),
     characters
   )(word)
 
