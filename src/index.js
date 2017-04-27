@@ -14,9 +14,7 @@ const flatten = reduce(concat, [])
 const characters = word => word.toLowerCase().split('')
 const keys = Object.keys
 const or = curry((defaultVal, val) => val || defaultVal)
-const mutate = curry((key, value, obj) => {
-  obj[key] = value
-})
+const mutate = curry((key, value, obj) => obj[key] = value)
 
 const isWordBoundary = compose(or(false), prop(TERMINATOR))
 const traverse = reduce(compose(or({}), flip(prop)))
