@@ -1,4 +1,11 @@
-import { compose, curry, map, prop, reduce } from './functional'
+import {
+  compose,
+  curry,
+  flip,
+  map,
+  prop,
+  reduce
+} from './functional'
 
 const TERMINATOR = '$'
 
@@ -9,6 +16,7 @@ const keys = Object.keys
 const or = curry((defaultVal, val) => val || defaultVal)
 
 const isWordBoundary = compose(or(false), prop(TERMINATOR))
+const traverse = reduce(compose(or({}), flip(prop)))
 
 const insertWith = tree => word => {
   let currentNode = tree
@@ -29,10 +37,7 @@ const findMutations = (node, word) => compose(
   keys
 )(node)
 
-const traverseWith = tree => compose(
-  reduce((node, character) => node[character] || {}, tree),
-  characters
-)
+const traverseWith = tree => compose(traverse(tree), characters)
 
 export default words => {
   const root = {}
