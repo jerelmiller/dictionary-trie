@@ -8,6 +8,10 @@
     "test": "jest",
     "test:watch": "yarn test -- --watch"
   },
+  "files": [
+    "src",
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jerelmiller/dictionary-trie.git"
