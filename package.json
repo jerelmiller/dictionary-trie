@@ -1,7 +1,7 @@
 {
   "name": "dictionary-trie",
   "version": "1.0.0",
-  "description": "Store a dictionary of words implemented with a trie",
+  "description": "Create and search a dictionary of words using a trie data structure",
   "main": "lib/index.js",
   "scripts": {
     "clean": "rimraf lib",
