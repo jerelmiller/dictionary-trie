@@ -22,7 +22,7 @@ const findMutations = (node, word) => compose(
   map(character =>
     character === TERMINATOR ?
       word :
-      findMutations(node[character], concat(word, characte))
+      findMutations(node[character], concat(word, character))
   ),
   Object.keys
 )(node)
