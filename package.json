@@ -4,9 +4,12 @@
   "description": "Store a dictionary of words implemented with a trie",
   "main": "lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=commonjs babel src --out-dir lib",
+    "clean": "rimraf lib",
+    "build": "yarn run build:commonjs",
     "test": "jest",
-    "test:watch": "yarn test -- --watch"
+    "test:watch": "yarn test -- --watch",
+    "build:commonjs": "BABEL_ENV=commonjs babel src --out-dir lib",
+    "prepublish": "yarn run clean && yarn run test && yarn run build"
   },
   "files": [
     "src",
@@ -30,6 +33,7 @@
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
-    "jest": "^19.0.2"
+    "jest": "^19.0.2",
+    "rimraf": "^2.6.1"
   }
 }
