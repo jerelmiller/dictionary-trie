@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jerelmiller/dictionary-trie.svg?branch=master)](https://travis-ci.org/jerelmiller/dictionary-trie)
+
 # Dictionary Trie
 
 Create and efficiently search a dictionary of words.
